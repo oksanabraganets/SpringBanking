@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Credit</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+</head>
+<body ng-app="credit" ng-controller="CreditCtrl">
+<div class="header">
+    <a href="#default" class="logo">BANK PAYMENTS</a>
+    <div class="header-right">
+        <a href="#home">ENG</a>
+        <a href="#contact">UKR</a>
+    </div>
+</div>
+<div class="topnav">
+    <a href="/userPage.html" >Transfer money</a>
+    <a href="/bills">Pay the bill</a>
+    <a href="#">Get account info</a>
+    <a href="/credit" class="active">Credit request</a>
+</div>
+
+<div class="content" >
+    <h1 data-ng-init="getUserCredit()">Welcome {{first_name}} {{last_name}}!</h1>
+    <div id="divCreditExists">
+        <h3>You have a credit account opened already:</h3>
+        <table ng-model="credit">
+            <tr>
+                <th>Id</th>
+                <th>User</th>
+                <th>Limit</th>
+                <th>Validity</th>
+                <th>Type</th>
+            </tr>
+            <tr>
+                <td>{{credit.id}}</td>
+                <td>{{credit.user}}</td>
+                <td>{{credit.balance}}</td>
+                <td>{{credit.validity}}</td>
+                <td>{{credit.type}}</td>
+            </tr>
+        </table>
+    </div>
+    <div id="divNewCredit">
+        <h3>You can open a credit with a limit up to 200 000.</h3>
+        <form class="form-inline" name="form" autocomplete="off" novalidate ng-submit="form.$valid && sendForm(auth)">
+            <label for="inputLimit">Credit limit:</label>
+            <input type="number"
+                   class="form-control"
+                   id="inputLimit"
+                   placeholder="limit"
+                   required
+                   ng-model="auth.limit">
+            <button type="submit" class="btn btn-default" style="margin-top:30px" ng-disabled="form.$invalid">
+                Request for credit
+            </button>
+        </form>
+        <h3 id="resultMessage">{{message}}</h3>
+    </div>
+</div>
+<div class="footer">
+    <p>Created by Oksana Braganets 2020 C. All rights reserved.</p>
+</div>
+
+<script type="text/javascript" src="/js/credit.js"></script>
+</body>
+</html>

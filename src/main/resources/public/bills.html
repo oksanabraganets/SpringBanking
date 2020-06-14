@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bills</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+</head>
+<body ng-app="bills" ng-controller="BillsCtrl">
+<div class="header">
+    <a href="#default" class="logo">BANK PAYMENTS</a>
+    <div class="header-right">
+        <a href="#home">ENG</a>
+        <a href="#contact">UKR</a>
+    </div>
+</div>
+<div class="topnav">
+    <a href="/userPage.html" >Transfer money</a>
+    <a href="#" class="active">Pay the bill</a>
+    <a href="#">Get account info</a>
+    <a href="/credit">Credit request</a>
+</div>
+
+<div class="content" >
+    <div>
+        <h1 data-ng-init="getUserBills()">Welcome {{first_name}} {{last_name}}!</h1>
+        <h3>Bills to pay:</h3>
+        <table ng-model="bills">
+            <tr>
+                <th>Id</th>
+                <th>Amount</th>
+                <th>Recipient</th>
+            </tr>
+            <tr ng-repeat="u in bills">
+                <td>{{u.id}}</td>
+                <td>{{u.amount}}</td>
+                <td>{{u.recipient}}</td>
+            </tr>
+        </table>
+        <h3>Available accounts:</h3>
+        <table ng-model="accounts">
+            <tr>
+                <th>Id</th>
+                <th>User</th>
+                <th>Balance</th>
+                <th>Validity</th>
+                <th>Type</th>
+            </tr>
+            <tr ng-repeat="u in accounts">
+                <td>{{u.id}}</td>
+                <td>{{u.user}}</td>
+                <td>{{u.balance}}</td>
+                <td>{{u.validity}}</td>
+                <td>{{u.type}}</td>
+            </tr>
+        </table>
+    </div>
+    <div >
+        <form class="form-inline" name="form" autocomplete="off" novalidate ng-submit="form.$valid && sendForm(auth)">
+            <label for="inputBillId">Bill:</label>
+            <input type="number"
+                   class="form-control"
+                   id="inputBillId"
+                   placeholder="Enter bill id"
+                   required
+                   ng-model="auth.billId">
+            <label for="inputAccountId">Account:</label>
+            <input type="number"
+                   class="form-control"
+                   id="inputAccountId"
+                   placeholder="Enter account id"
+                   required
+                   ng-model="auth.accountId">
+            <button type="submit" class="btn btn-default" style="margin-top:30px" ng-disabled="form.$invalid">
+                Submit
+            </button>
+        </form>
+        <h3 id="resultMessage">{{message}}</h3>
+    </div>
+</div>
+<div class="footer">
+    <p>Created by Oksana Braganets 2020 C. All rights reserved.</p>
+</div>
+
+<script type="text/javascript" src="/js/bills.js"></script>
+</body>
+</html>

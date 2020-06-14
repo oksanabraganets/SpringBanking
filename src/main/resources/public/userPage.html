@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payments</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+</head>
+<body ng-app="transfer" ng-controller="TransferCtrl">
+<div class="header">
+    <a href="#default" class="logo">BANK PAYMENTS</a>
+    <div class="header-right">
+        <button ng-click="setENG()">ENG</button>
+        <button ng-click="setUKR()">UKR</button>
+        <button ng-click="logOut()">Log Out</button>
+    </div>
+</div>
+<div class="topnav">
+    <a href="#" class="active">Transfer money</a>
+    <a href="/bills">Pay the bill</a>
+    <a href="#">Get account info</a>
+    <a href="/credit">Credit request</a>
+</div>
+
+<div class="content" >
+    <div data-ng-init="getUserNames()">
+        <h3>{{date}}</h3>
+        <h1>Welcome {{first_name}} {{last_name}}!</h1>
+        <h3>From account:</h3>
+        <table ng-model="accounts">
+            <tr>
+                <th>Id</th>
+                <th>User</th>
+                <th>Balance</th>
+                <th>Validity</th>
+                <th>Type</th>
+            </tr>
+            <tr ng-repeat="u in accounts">
+                <td>{{u.id}}</td>
+                <td>{{u.user}}</td>
+                <td>{{u.balance}}</td>
+                <td>{{u.validity}}</td>
+                <td>{{u.type}}</td>
+            </tr>
+        </table>
+        <h3>To account:</h3>
+        <table ng-model="all_accounts">
+            <tr>
+                <th>Id</th>
+                <th>User</th>
+                <th>Balance</th>
+                <th>Validity</th>
+                <th>Type</th>
+            </tr>
+            <tr ng-repeat="u in all_accounts">
+                <td>{{u.id}}</td>
+                <td>{{u.user}}</td>
+                <td>{{u.balance}}</td>
+                <td>{{u.validity}}</td>
+                <td>{{u.type}}</td>
+            </tr>
+        </table>
+    </div>
+    <div >
+        <form class="form-inline" name="form" autocomplete="off" novalidate ng-submit="form.$valid && sendForm(auth)">
+            <label for="inputFromId">From:</label>
+            <input type="number"
+                   class="form-control"
+                   id="inputFromId"
+                   placeholder="Enter account id"
+                   required
+                   ng-model="auth.fromId">
+            <label for="inputToId">To:</label>
+            <input type="number"
+                   class="form-control"
+                   id="inputToId"
+                   placeholder="Enter account id"
+                   required
+                   ng-model="auth.toId">
+            <label for="inputAmount">Amount:</label>
+            <input type="number"
+                   class="form-control"
+                   id="inputAmount"
+                   placeholder="Enter amount"
+                   required
+                   ng-model="auth.amount">
+            <button type="submit" class="btn btn-default" style="margin-top:30px" ng-disabled="form.$invalid">
+                Submit
+            </button>
+        </form>
+        <h3 id="resultMessage">{{message}}</h3>
+    </div>
+</div>
+<script type="text/javascript" src="/js/transfer.js"></script>
+</body>
+</html>
