@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
@@ -24,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/readme.txt", "/css/*", "/js/*").permitAll()
-                .antMatchers("/form").permitAll()
+                .antMatchers("/form", "/index.html").permitAll()
                 .antMatchers("/userPage.html", "/bills", "/credit").hasRole("USER")
                 .antMatchers("/admin.html", "/user").hasRole("ADMIN")
                 .antMatchers("/api").permitAll()
