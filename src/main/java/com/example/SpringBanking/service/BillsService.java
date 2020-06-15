@@ -2,10 +2,7 @@ package com.example.SpringBanking.service;
 
 import com.example.SpringBanking.dto.BillsDTO;
 import com.example.SpringBanking.dto.PaymentDTO;
-import com.example.SpringBanking.entity.AccountDAO;
-import com.example.SpringBanking.entity.BillDAO;
-import com.example.SpringBanking.entity.TransferDAO;
-import com.example.SpringBanking.entity.TransferType;
+import com.example.SpringBanking.entity.*;
 import com.example.SpringBanking.exception.TransferParameterException;
 import com.example.SpringBanking.repository.AccountRepository;
 import com.example.SpringBanking.repository.BillRepository;
@@ -37,29 +34,39 @@ public class BillsService {
                 .firstName(UserService.getCurrentUser().getFirstName())
                 .lastName(UserService.getCurrentUser().getLastName())
                 .bills(billRepository.findAllByUser(UserService.getCurrentUser().getId()))
-                .accounts(null/*accountRepository.findAllByUser(UserService.getCurrentUser().getId())*/)
+                .accounts(UserService.getCurrentUser().getAccounts())
                 .build();
     }
 
-    @Transactional
     public void payTheBill(PaymentDTO payment) throws TransferParameterException {
         AccountDAO account = accountRepository.findById(payment.getAccountId()).orElseThrow(
                 TransferParameterException::new);
         BillDAO bill = billRepository.findById(payment.getBillId()).orElseThrow(TransferParameterException::new);
-        if (account.getType().name().equals("DEPOSIT") &&
-                account.getBalance() - bill.getAmount() >= 0) {
-            account.setBalance(account.getBalance() - bill.getAmount());
-        }else
+        if ( ! isEnoughMoneyOnAccount(account, bill.getAmount()))
             throw  new TransferParameterException();
-        accountRepository.save(account);
-        transferRepository.save(TransferDAO.builder()
+        TransferDAO transfer = TransferDAO.builder()
                 .sourceId(payment.getAccountId())
                 .destId(null)
                 .amount(bill.getAmount())
                 .date(new java.sql.Date(System.currentTimeMillis()))
                 .type(TransferType.BILL)
-                .build()
-        );
+                .build();
+        account.setBalance(account.getBalance() - bill.getAmount());
+        payBillAndWriteHistory(account, transfer, bill);
+    }
+
+    @Transactional
+    private void payBillAndWriteHistory(AccountDAO account, TransferDAO transfer, BillDAO bill) {
+        accountRepository.save(account);
+        transferRepository.save(transfer);
         billRepository.delete(bill);
+    }
+
+    private boolean isEnoughMoneyOnAccount(AccountDAO account, Long billAmount){
+        if ( account.getType() == AccountType.DEPOSIT ){
+            return account.getBalance() >= billAmount;
+        }else{
+            return (account.getCredit_limit() + account.getBalance()) >= billAmount;
+        }
     }
 }
