@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -29,7 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers("/api").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().permitAll()
+                .formLogin()
+                .successHandler(myAuthenticationSuccessHandler())
+                .permitAll()
                 .and()
                 .logout().permitAll();
     }
@@ -44,5 +47,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .userDetailsService(userService)
                 .passwordEncoder(customPasswordEncoder());
     }
+
+    @Bean
+    public AuthenticationSuccessHandler myAuthenticationSuccessHandler() {
+        return new UrlAuthenticationSuccessHandler();
+    }
+
 
 }
