@@ -23,7 +23,7 @@ public class CreditController {
     }
 
     @RequestMapping(value = "/credit", method = RequestMethod.GET)
-    public CreditDTO getUserBills(){
+    public CreditDTO getUserCredit(){
         return creditService.getUserCredit();
     }
 
