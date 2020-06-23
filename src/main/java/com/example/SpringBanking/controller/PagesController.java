@@ -21,6 +21,11 @@ public class PagesController {
         return "userPage.html";
     }
 
+    @RequestMapping("/admin")
+    public String adminPage(){
+        return "admin.html";
+    }
+
     @RequestMapping("/bills")
     public String billsPage(){
         return "bills.html";
