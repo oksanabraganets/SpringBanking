@@ -71,7 +71,6 @@ public class UserService implements UserDetailsService {
                 .credentialsNonExpired(true)
                 .enabled(true)
                 .build();
-        userDetails.setAccountNonExpired(true);
         System.out.println(userDetails);
         return userDetails;
     }
