@@ -18,4 +18,26 @@ angular.module("admin",[])
                 }
             );
         }
+        $scope.sendForm = function(auth){
+                 $http({
+                     method: "POST",
+                     url: "/admin/approve",
+                     data: $.param(auth),
+                     headers: { "Content-Type" : "application/x-www-form-urlencoded" }
+                             }).then(
+                                 (data) => {
+                                     resultMessageEl.style.color = 'green';
+                                     $scope.message = "Payment was successful";
+                                     inputBillId.value = '';
+                                     inputAccountId.value = '';
+                                 },
+                                 (error) => {
+                                     resultMessageEl.style.color = 'red';
+                                     inputBillId.value = '';
+                                     inputAccountId.value = '';
+                                     $scope.message = "Not enough money to pay"
+                                 }
+                             );
+                         }
+
     }]);
