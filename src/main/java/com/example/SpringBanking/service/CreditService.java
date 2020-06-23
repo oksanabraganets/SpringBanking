@@ -2,6 +2,8 @@ package com.example.SpringBanking.service;
 
 import com.example.SpringBanking.dto.CreditDTO;
 import com.example.SpringBanking.dto.LimitDTO;
+import com.example.SpringBanking.entity.AccountDAO;
+import com.example.SpringBanking.entity.AccountType;
 import com.example.SpringBanking.entity.RequestDAO;
 import com.example.SpringBanking.exception.TransferParameterException;
 import com.example.SpringBanking.repository.AccountRepository;
@@ -26,16 +28,16 @@ public class CreditService {
     }
 
     public CreditDTO getUserCredit(){
-//        Optional<AccountDAO> credit  = accountRepository.findByIdAndType(
-//                UserService.getCurrentUser().getId(),
-//                AccountType.CREDIT);
-//        return CreditDTO.builder()
-//                .firstName(UserService.getCurrentUser().getFirstName())
-//                .lastName(UserService.getCurrentUser().getLastName())
-//                .creditExists(credit.isPresent())
-//                .credit(credit.orElse(null))
-//                .build();
-        return null;
+        Optional<AccountDAO> credit = UserService.getCurrentUser().getAccounts()
+                .stream()
+                .filter(x -> x.getType() == AccountType.CREDIT)
+                .findAny();
+        return CreditDTO.builder()
+                .firstName(UserService.getCurrentUser().getFirstName())
+                .lastName(UserService.getCurrentUser().getLastName())
+                .creditExists(credit.isPresent())
+                .credit(credit.orElse(null))
+                .build();
     }
 
     public void requestCredit(LimitDTO limitDTO) throws TransferParameterException {
